@@ -6,7 +6,10 @@ class Home extends BaseController
 {
   public function index()
   {
-    // return view('welcome_message');
-    echo "Ini adalah controller Home:index";
+    if ($this->session->get("user")) {
+      return redirect()->to('/user');
+    } else {
+      return redirect()->to('/auth');
+    }
   }
 }
