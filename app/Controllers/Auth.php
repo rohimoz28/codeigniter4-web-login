@@ -4,6 +4,7 @@ namespace App\Controllers;
 
 use App\Controllers\BaseController;
 use App\Services\Impl\AuthServiceImpl;
+use App\Models\UserModel;
 
 class Auth extends BaseController
 {
@@ -12,6 +13,7 @@ class Auth extends BaseController
   public function __construct()
   {
     $this->authServiceImpl = new AuthServiceImpl();
+    $this->userModel = new \App\Models\UserModel();
   }
 
   public function index()
@@ -24,15 +26,18 @@ class Auth extends BaseController
     $email = $this->request->getVar('email');
     $password = $this->request->getVar('password');
 
+    // put validation here
+
     if ($this->authServiceImpl->login($email, $password)) {
+      $user = $this->userModel->where('email', $email)->first();
       // put session here
       $data = [
         'uniqid' => uniqid(),
+        'name' => $user['name'], 
         'isLogin' => true,
       ];
       $this->session->set($data);
 
-      // echo $this->session->get('data');
       return redirect()->to('user');
     }
 
