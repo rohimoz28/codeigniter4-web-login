@@ -14,7 +14,7 @@ class User extends ResourceController
   public function index()
   {
     $data['title'] = 'Halaman User';
-    return view('user/index',$data);
+    return view('user/index', $data);
   }
 
   /**
@@ -34,7 +34,9 @@ class User extends ResourceController
    */
   public function new()
   {
-    //
+    return view('user/new', [
+      'title' => 'Register',
+    ]);
   }
 
   /**
