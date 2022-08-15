@@ -18,7 +18,9 @@ class Auth extends BaseController
 
   public function index()
   {
-    return view('auth/login');
+    return view('auth/login', [
+      'title' => 'Login',
+    ]);
   }
 
   public function doLogin()
@@ -26,8 +28,10 @@ class Auth extends BaseController
     $email = $this->request->getVar('email');
     $password = $this->request->getVar('password');
 
-    // put validation here
-
+    // validation
+    if (empty($email) || empty($password)) {
+      return redirect()->back()->with('error', 'Email or password is required');
+    }
     if ($this->authServiceImpl->login($email, $password)) {
       $user = $this->userModel->where('email', $email)->first();
       // put session here
@@ -36,12 +40,14 @@ class Auth extends BaseController
         'name' => $user['name'],
         'isLogin' => true,
       ];
+
       $this->session->set($data);
 
       return redirect()->to('user');
     }
 
     return redirect()->back()->with('error', 'Wrong email or password!');
+
   }
 
   public function doLogout()

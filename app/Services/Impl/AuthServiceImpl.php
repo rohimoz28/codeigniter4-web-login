@@ -11,7 +11,7 @@ class AuthServiceImpl implements AuthService
     $users = new \App\Models\UserModel();
     $user = $users->where('email', $email)->first();
 
-    if(is_null($user) || !password_verify($password, $user['password'])){
+    if(!password_verify($password, $user['password'])){
       return false;
     }
 
