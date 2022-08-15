@@ -33,7 +33,7 @@ class Auth extends BaseController
       // put session here
       $data = [
         'uniqid' => uniqid(),
-        'name' => $user['name'], 
+        'name' => $user['name'],
         'isLogin' => true,
       ];
       $this->session->set($data);
@@ -42,5 +42,13 @@ class Auth extends BaseController
     }
 
     return redirect()->back()->with('error', 'Wrong email or password!');
+  }
+
+  public function doLogout()
+  {
+    $session = session();
+    $session->destroy();
+
+    return redirect()->to('/');
   }
 }

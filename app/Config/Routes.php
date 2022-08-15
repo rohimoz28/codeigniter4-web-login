@@ -38,6 +38,7 @@ $routes->set404Override();
 $routes->get('/', 'Home::index');
 $routes->get('/auth', 'Auth::index');
 $routes->post('/auth/login', 'Auth::doLogin');
+$routes->get('auth/logout', 'Auth::doLogout');
 
 $routes->get('/user', 'User::index');
 /*
