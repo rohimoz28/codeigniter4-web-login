@@ -26,9 +26,16 @@ class Auth extends BaseController
 
     if ($this->authServiceImpl->login($email, $password)) {
       // put session here
-      return 'auth ok';
+      $data = [
+        'uniqid' => uniqid(),
+        'isLogin' => true,
+      ];
+      $this->session->set($data);
+
+      // echo $this->session->get('data');
+      return redirect()->to('user');
     }
 
-    return 'auth not ok';
+    return redirect()->back()->with('error', 'Wrong email or password!');
   }
 }
