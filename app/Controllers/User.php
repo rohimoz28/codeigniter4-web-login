@@ -2,10 +2,18 @@
 
 namespace App\Controllers;
 
+use App\Services\Impl\UserServiceImpl;
 use CodeIgniter\RESTful\ResourceController;
+use Config\Services;
 
 class User extends ResourceController
 {
+  protected $userService;
+
+  public function __construct()
+  {
+    $this->userService = new UserServiceImpl();
+  }
   /**
    * Return an array of resource objects, themselves in array format
    *
@@ -35,7 +43,8 @@ class User extends ResourceController
   public function new()
   {
     return view('user/new', [
-      'title' => 'Register',
+      'title' => 'Registration',
+      'validation' => Services::validation(),
     ]);
   }
 
@@ -46,7 +55,26 @@ class User extends ResourceController
    */
   public function create()
   {
-    //
+    // validasi
+    $rules = [
+      'name' => 'required',
+      'email' => 'required',
+      'password' => 'required',
+      'password_confirm' => 'required'
+    ];
+
+    $isValidate = $this->validate($rules);
+
+    if ($isValidate == false) {
+      return view('user/new', [
+        'title' => 'Registration',
+        'validation' => $this->validator,
+      ]);
+    }
+
+    // logic create new data
+    $this->userService->save($rules);
+    return redirect()->to('/')->with('success', 'Registration success. Please Login');
   }
 
   /**

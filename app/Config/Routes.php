@@ -47,6 +47,7 @@ $routes->get('auth/logout', 'Auth::doLogout', ['filter' => 'member']);
 $routes->get('/user', 'User::index', ['filter' => 'member']);
 
 $routes->get('/user/new', 'User::new');
+$routes->post('/user/create', 'User::create');
 /*
  * --------------------------------------------------------------------
  * Additional Routing

@@ -37,6 +37,7 @@ class Auth extends BaseController
       // put session here
       $data = [
         'uniqid' => uniqid(),
+        'id' => $user['id'],
         'name' => $user['name'],
         'isLogin' => true,
       ];
