@@ -51,8 +51,8 @@ $routes->post('/user/new', 'User::create');
 
 $routes->get('/auth/forgot', 'Auth::forgot');
 $routes->post('/auth/forgot', 'Auth::doForgot');
-$routes->get('/auth/reset', 'Auth::reset');
-$routes->post('/auth/reset', 'Auth::doReset');
+$routes->get('/auth/reset', 'Auth::reset', ['filter' => 'reset']);
+$routes->post('/auth/reset', 'Auth::doReset', ['filter' => 'reset']);
 
 /*
  * --------------------------------------------------------------------

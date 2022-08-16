@@ -4,6 +4,7 @@ namespace Config;
 
 use App\Filters\OnlyGuest;
 use App\Filters\OnlyMember;
+use App\Filters\ResetPassword;
 use CodeIgniter\Config\BaseConfig;
 use CodeIgniter\Filters\CSRF;
 use CodeIgniter\Filters\DebugToolbar;
@@ -27,6 +28,7 @@ class Filters extends BaseConfig
     'secureheaders' => SecureHeaders::class,
     'member'        => OnlyMember::class,
     'guest'         => OnlyGuest::class,
+    'reset'         => ResetPassword::class,
   ];
 
   /**
