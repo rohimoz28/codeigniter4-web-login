@@ -72,6 +72,7 @@ class User extends ResourceController
     if (!$this->validate($rules, $errors)) {
       return view('user/new', [
         'title' => 'Registration',
+        'validation' => $this->validator,
       ]);
     }
 

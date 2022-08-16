@@ -3,7 +3,7 @@
 <?= $this->section('content') ?>
 <main class="form-signin w-100 m-auto">
   <?php $validation = \Config\Services::validation() ?>
-  <form method="POST" action="/user/create">
+  <form method="POST" action="<?= base_url('user/new') ?>">
     <?= csrf_field() ?>
     <h1 class="h3 mb-3 fw-normal">Please Register</h1>
 
