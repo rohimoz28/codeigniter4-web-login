@@ -9,7 +9,13 @@ class UserServiceImpl implements UserService
 {
   public function save(array $data): void
   {
+    $allData = [
+      'name' => $data['name'],
+      'email' => $data['email'],
+      'password' => password_hash($data['password'], PASSWORD_BCRYPT),
+    ];
+
     $user = new UserModel();
-    $user->save();
+    $user->save($allData);
   }
 }

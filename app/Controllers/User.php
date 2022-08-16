@@ -57,24 +57,27 @@ class User extends ResourceController
   {
     // validasi
     $rules = [
-      'name' => 'required',
-      'email' => 'required',
-      'password' => 'required',
-      'password_confirm' => 'required'
+      'name' => 'required|min_length[5]',
+      'email' => 'required|valid_email|is_unique[users.email]',
+      'password' => 'required|min_length[6]|max_length[200]',
+      'password_confirm' => 'matches[password]',
     ];
 
-    $isValidate = $this->validate($rules);
+    $errors = [
+      'password' => [
+        'matches' => 'Password not matches',
+      ]
+    ];
 
-    if ($isValidate == false) {
+    if (!$this->validate($rules, $errors)) {
       return view('user/new', [
         'title' => 'Registration',
-        'validation' => $this->validator,
       ]);
     }
 
     // logic create new data
-    $this->userService->save($rules);
-    return redirect()->to('/')->with('success', 'Registration success. Please Login');
+    $this->userService->save($_POST);
+    return redirect()->to('/auth')->with('success', 'Registration success. Please Login');
   }
 
   /**
