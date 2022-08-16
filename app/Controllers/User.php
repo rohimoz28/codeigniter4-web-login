@@ -59,7 +59,7 @@ class User extends ResourceController
     $rules = [
       'name' => 'required|min_length[5]',
       'email' => 'required|valid_email|is_unique[users.email]',
-      'password' => 'required|min_length[6]|max_length[200]',
+      'password' => 'required|min_length[5]|max_length[200]',
       'password_confirm' => 'matches[password]',
     ];
 

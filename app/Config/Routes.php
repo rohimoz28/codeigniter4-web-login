@@ -48,6 +48,12 @@ $routes->get('/user', 'User::index', ['filter' => 'member']);
 
 $routes->get('/user/new', 'User::new');
 $routes->post('/user/new', 'User::create');
+
+$routes->get('/auth/forgot', 'Auth::forgot');
+$routes->post('/auth/forgot', 'Auth::doForgot');
+$routes->get('/auth/reset', 'Auth::reset');
+$routes->post('/auth/reset', 'Auth::doReset');
+
 /*
  * --------------------------------------------------------------------
  * Additional Routing

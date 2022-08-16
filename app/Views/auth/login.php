@@ -33,6 +33,7 @@
   </form>
 
   <a href="/user/new" class="w-100 btn btn-lg btn-success mt-2">Register</a>
+  <a href="/auth/forgot" class="w-100 btn btn-lg btn-warning mt-2">Forgot Password</a>
 
       <p class="mt-5 mb-3 text-muted">Rohimuhamadd - 2022</p>
 </main>
