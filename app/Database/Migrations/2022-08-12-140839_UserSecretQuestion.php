@@ -5,12 +5,10 @@ namespace App\Database\Migrations;
 use CodeIgniter\Database\Migration;
 use CodeIgniter\Database\RawSql;
 
-class User extends Migration
+class UserSecretQuestion extends Migration
 {
   public function up()
   {
-    $this->db->disableForeignKeyChecks();
-
     $this->forge->addField([
       'id' => [
         'type' => 'INT',
@@ -18,21 +16,11 @@ class User extends Migration
         'unsigned' => true,
         'auto_increment' => true
       ],
-      'id_secret_question' => [
-        'type' => 'INT',
-        'constraint' => 5,
-        'unsigned'   => true,
-      ],
-      'name' => [
-        'type' => 'VARCHAR',
-        'constraint' => 255
-      ],
-      'email' => [
+      'question' => [
         'type' => 'VARCHAR',
         'constraint' => 255,
-        'unique' => true
       ],
-      'password' => [
+      'answer' => [
         'type' => 'VARCHAR',
         'constraint' => 255,
       ],
@@ -43,14 +31,11 @@ class User extends Migration
     ]);
 
     $this->forge->addKey('id', true);
-    $this->forge->addForeignKey('id_secret_question', 'secret_questions', 'id');
-    $this->forge->createTable('users');
-
-    $this->db->enableForeignKeyChecks();
+    $this->forge->createTable('secret_questions');
   }
 
   public function down()
   {
-    $this->forge->dropTable('users');
+    $this->forge->dropTable('secret_questions');
   }
 }

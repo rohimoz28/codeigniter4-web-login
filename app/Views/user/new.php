@@ -38,6 +38,24 @@
         </div>
       <?php endif; ?>
     </div>
+    <div class="form-floating mb-2">
+      <select class="form-select" id="floatingSelect" aria-label="Floating label select example">
+        <option selected>-- Secret Question --</option>
+        <option value="1">In what city did you meet your spouse/significant other?</option>
+        <option value="2">Where were you when you had your first kiss?</option>
+        <option value="3">In what city or town did your mother and father meet? </option>
+      </select>
+      <label for="floatingSelect">Works with selects</label>
+    </div>
+    <div class="form-floating mb-2">
+      <input type="text" class="form-control <?= ($validation->hasError('answer') ? 'is-invalid' : '') ?>" id="floatingInput" placeholder="Your Answer" name="answer">
+      <label for="floatingInput">Your Answer</label>
+      <?php if ($validation->getError('answer')) : ?>
+        <div class="invalid-feedback">
+          <?= $validation->getError('answer') ?>
+        </div>
+      <?php endif; ?>
+    </div>
 
     <button class="w-100 btn btn-lg btn-primary" type="submit">Submit</button>
   </form>

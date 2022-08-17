@@ -11,17 +11,19 @@ class UserSeeder extends Seeder
   {
     $data = [
       [
-      'name' => 'Rohim Muhamad',
-      'email'    => 'rohimuhamadd@gmail.com',
-      'password' => password_hash('rahasia', PASSWORD_BCRYPT),
-      'created_at' => Time::now(),
-      ], 
+        'name' => 'Rohim Muhamad',
+        'id_secret_question' => 1,
+        'email'    => 'rohimuhamadd@gmail.com',
+        'password' => password_hash('rahasia', PASSWORD_BCRYPT),
+        'created_at' => Time::now(),
+      ],
       [
-      'name' => 'Yantina Larasati',
-      'email'    => 'yantina@gmail.com',
-      'password' => password_hash('yantina', PASSWORD_BCRYPT),
-      'created_at' => Time::now(),
-      ], 
+        'name' => 'Yantina Larasati',
+        'id_secret_question' => 2,
+        'email'    => 'yantina@gmail.com',
+        'password' => password_hash('yantina', PASSWORD_BCRYPT),
+        'created_at' => Time::now(),
+      ],
     ];
 
     // Simple Queries
