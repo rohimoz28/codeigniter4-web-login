@@ -76,12 +76,55 @@ class Auth extends BaseController
     if ($this->authServiceImpl->checkEmail($email)) {
       $data = [
         'email' => $email,
+        'title' => 'Secret Question',
+      ];
+      return view('/auth/question', $data);
+    }
+
+    session()->setFlashdata('error', 'Email is not registered.');
+    return redirect()->back();
+  }
+
+  public function question()
+  {
+    return view('/auth/question', [
+      'title' => 'Secret Question',
+      'validation' => $this->validator,
+    ]);
+  }
+
+  public function checkQuestion()
+  {
+    $email = $this->request->getVar('email');
+    $answer = $this->request->getVar('answer');
+
+    // validasi
+    $rules = [
+      'answer' => 'required',
+    ];
+
+    $is_validated = $this->validate($rules);
+
+    if (!$is_validated) {
+      return view('auth/reset', [
+        'title' => 'Secret Question',
+        'validation' => $this->validator,
+      ]);
+    }
+
+    // check answer
+    $is_answer = $this->authServiceImpl->checkAnswer($email, $answer);
+
+    if ($is_answer) {
+      $data = [
+        'email' => $email,
         'title' => 'Reset Password',
       ];
       return view('/auth/reset', $data);
     }
 
-    session()->setFlashdata('error', 'Email is not registered.');
+    // answer wrong
+    session()->setFlashdata('error', 'Your answer is wrong.');
     return redirect()->back();
   }
 

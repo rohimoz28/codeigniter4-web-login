@@ -44,17 +44,19 @@ $routes->get('/auth', 'Auth::index', ['filter' => 'guest']);
 $routes->post('/auth/login', 'Auth::doLogin', ['filter' => 'guest']);
 $routes->get('auth/logout', 'Auth::doLogout', ['filter' => 'member']);
 
+$routes->get('/auth/forgot', 'Auth::forgot');
+$routes->post('/auth/forgot', 'Auth::doForgot');
+$routes->get('/auth/reset', 'Auth::reset', ['filter' => 'reset']);
+$routes->post('/auth/reset', 'Auth::doReset', ['filter' => 'reset']);
+$routes->get('/auth/question', 'Auth::question');
+$routes->post('/auth/question', 'Auth::checkQuestion');
+
 
 // User Controller 
 $routes->get('/user', 'User::index', ['filter' => 'member']);
 
 $routes->get('/user/new', 'User::new');
 $routes->post('/user/new', 'User::create');
-
-$routes->get('/auth/forgot', 'Auth::forgot');
-$routes->post('/auth/forgot', 'Auth::doForgot');
-$routes->get('/auth/reset', 'Auth::reset', ['filter' => 'reset']);
-$routes->post('/auth/reset', 'Auth::doReset', ['filter' => 'reset']);
 
 /*
  * --------------------------------------------------------------------

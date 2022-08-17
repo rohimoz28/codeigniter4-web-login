@@ -36,7 +36,19 @@ class AuthServiceImpl implements AuthService
     return false;
   }
 
-  public function update($email, $password): void 
+  public function checkAnswer(string $email, string $answer): bool
+  {
+    $user = $this->userModel->where('email', $email)->first();
+    // $id = $user['id'];
+
+    if ($user['answer'] == $answer) {
+      return true;
+    }
+
+    return false;
+  }
+
+  public function update(string $email, string $password): void
   {
     $user = $this->userModel->where('email', $email)->first();
     $id = $user['id'];
