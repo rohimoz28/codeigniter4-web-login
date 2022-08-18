@@ -12,6 +12,7 @@ class AuthServiceImpl implements AuthService
   public function __construct()
   {
     $this->userModel = new \App\Models\UserModel();
+    $this->secretQuestion = new \App\Models\SecretQuestionModel();
   }
 
   public function login($email, $password): bool
@@ -39,9 +40,10 @@ class AuthServiceImpl implements AuthService
   public function checkAnswer(string $email, string $answer): bool
   {
     $user = $this->userModel->where('email', $email)->first();
-    // $id = $user['id'];
+    $is_true = $this->secretQuestion->where('id', $user['id'])->get();
+    $is_true = $is_true->getFirstRow('array');
 
-    if ($user['answer'] == $answer) {
+    if ($is_true['answer'] == $answer) {
       return true;
     }
 

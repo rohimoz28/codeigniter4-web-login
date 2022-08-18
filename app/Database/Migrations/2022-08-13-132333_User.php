@@ -9,19 +9,12 @@ class User extends Migration
 {
   public function up()
   {
-    $this->db->disableForeignKeyChecks();
-
     $this->forge->addField([
       'id' => [
         'type' => 'INT',
         'constraint' => 5,
         'unsigned' => true,
         'auto_increment' => true
-      ],
-      'id_secret_question' => [
-        'type' => 'INT',
-        'constraint' => 5,
-        'unsigned'   => true,
       ],
       'name' => [
         'type' => 'VARCHAR',
@@ -43,10 +36,7 @@ class User extends Migration
     ]);
 
     $this->forge->addKey('id', true);
-    $this->forge->addForeignKey('id_secret_question', 'secret_questions', 'id');
     $this->forge->createTable('users');
-
-    $this->db->enableForeignKeyChecks();
   }
 
   public function down()

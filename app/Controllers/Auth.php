@@ -106,8 +106,9 @@ class Auth extends BaseController
     $is_validated = $this->validate($rules);
 
     if (!$is_validated) {
-      return view('auth/reset', [
+      return view('auth/question', [
         'title' => 'Secret Question',
+        'email' => $email,
         'validation' => $this->validator,
       ]);
     }
@@ -122,7 +123,6 @@ class Auth extends BaseController
       ];
       return view('/auth/reset', $data);
     }
-
     // answer wrong
     session()->setFlashdata('error', 'Your answer is wrong.');
     return redirect()->back();

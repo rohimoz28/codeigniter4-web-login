@@ -2,21 +2,22 @@
 
 <?= $this->section('content') ?>
 <main class="form-signin w-100 m-auto">
+
   <?php $validation = \Config\Services::validation() ?>
-  <form method="POST" action="<?= base_url('user/question') ?>">
+
+  <?php if (session()->getFlashdata('error')) : ?>
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+      <?= session()->getFlashdata('error') ?>
+      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+  <?php endif; ?>
+
+  <form method="POST" action="<?= base_url('auth/question') ?>">
     <?= csrf_field() ?>
     <h1 class="h3 mb-3 fw-normal">Your secret question</h1>
 
-    <input type="hidden" name="email" value="<?= $email ?>" >
-    <!-- <div class="form-floating mb-2"> -->
-    <!--   <select class="form-select" id="floatingSelect" aria-label="Floating label select example"> -->
-    <!--     <option selected>-- Secret Question --</option> -->
-    <!--     <option value="1">In what city did you meet your spouse/significant other?</option> -->
-    <!--     <option value="2">Where were you when you had your first kiss?</option> -->
-    <!--     <option value="3">In what city or town did your mother and father meet? </option> -->
-    <!--   </select> -->
-    <!--   <label for="floatingSelect">Works with selects</label> -->
-    <!-- </div> -->
+    <input type="hidden" name="email" value="<?= $email ?>">
+
     <div class="mb-2">
       <ul class="list-group list-group-flush">
         <li class="list-group-item">Where were you when you had your first kiss?</li>

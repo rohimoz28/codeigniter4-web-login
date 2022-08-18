@@ -12,12 +12,14 @@ class SecretQuestionsSeeder extends Seeder
     $data = [
       [
         'id'          => 1,
+        'id_user'     => 1,
         'question'    => 'Where were you when you had your first kiss?',
         'answer'      => 'bar',
         'created_at'  => Time::now(),
       ],
       [
         'id'          => 2,
+        'id_user'     => 2,
         'question'    => 'Where were you when you had your first kiss?',
         'answer'      => 'bar',
         'created_at'  => Time::now(),
