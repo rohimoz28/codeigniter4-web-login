@@ -2,6 +2,7 @@
 
 <?= $this->section('content') ?>
 <main class="form-signin w-100 m-auto">
+<?php (isset($error)) ? $error : '' ; ?>
   <?php $validation = \Config\Services::validation() ?>
   <form method="POST" action="<?= base_url('user/new') ?>">
     <?= csrf_field() ?>

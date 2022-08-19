@@ -14,6 +14,7 @@ class User extends ResourceController
   {
     $this->userService = new UserServiceImpl();
   }
+
   /**
    * Return an array of resource objects, themselves in array format
    *
@@ -55,79 +56,29 @@ class User extends ResourceController
    */
   public function create()
   {
-    $this->db = \Config\Database::connect();
-    $userModel = new \App\Models\UserModel();
-    $secretModel = new \App\Models\SecretQuestionModel();
-
-
-    $name = $this->request->getVar('name');
-    $email = $this->request->getVar('email');
-    $password = $this->request->getVar('password');
-    $question = $this->request->getVar('question');
-    $answer = $this->request->getVar('answer');
+    $validation = \Config\Services::validation();
 
     // validasi
-    $rules = [
-      'name' => 'required|min_length[5]',
-      'email' => 'required|valid_email|is_unique[users.email]',
-      'password' => 'required|min_length[5]|max_length[200]',
-      'password_confirm' => 'matches[password]',
-      'question' => 'required|not_in_list[0]',
-      'answer' => 'required',
-    ];
-
-    $errors = [
-      'password' => [
-        'matches' => 'Password not matches',
-      ],
-      'question' => [
-        'not_in_list' => 'Please choose your secret questions',
-      ]
-    ];
-
-    if (!$this->validate($rules, $errors)) {
+    if (!$validation->run($_POST, 'signup')) {
       return view('user/new', [
         'title' => 'Registration',
         'validation' => $this->validator,
       ]);
     }
 
-    // start transaction
-    $userModel->transStart();
-    $data_user = [
-      'name' => $name,
-      'email' => $email,
-      'password' => password_hash($password, PASSWORD_BCRYPT),
-    ];
+    // new register action
+    $create_user = $this->userService->save($_POST);
 
-    $userModel->insert($data_user);
-    $user_id = $userModel->insertID();
-
-    $data_secret = [
-      'id_user' => $user_id,
-      'question' => $question,
-      'answer' => $answer,
-    ];
-
-    $secretModel->insert($data_secret);
-    $userModel->transComplete();
-    //end transaction
-
-    if ($this->db->transStatus() === false) {
-      $this->db->transRollback();
-      echo "insert gagal";
-    } else {
-      $this->db->transCommit();
+    if ($create_user) {
       return redirect()->to('/auth')->with('success', 'Registration success. Please Login');
     }
-    // var_dump($_POST);
-    // die;
 
-
-    // logic create new data
-    // $this->userService->save($_POST);
-    // return redirect()->to('/auth')->with('success', 'Registration success. Please Login');
-    // return 'create';
+    // if fail
+    return view('user/new', [
+      'title' => 'Registration',
+      'error' => 'Registration failed',
+      'validation' => $this->validator,
+    ]);
   }
 
   /**
