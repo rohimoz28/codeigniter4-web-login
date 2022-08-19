@@ -26,7 +26,7 @@ class ResetPassword implements FilterInterface
   public function before(RequestInterface $request, $arguments = null)
   {
     $email = '';
-    if (empty($email)) {
+    if ($email) {
       return redirect()->to('/');
     }
   }

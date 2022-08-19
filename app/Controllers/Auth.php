@@ -137,8 +137,9 @@ class Auth extends BaseController
 
   public function doReset()
   {
-    $email = $this->request->getVar('email');
-    $password = $this->request->getVar('password');
+    $email                  = $this->request->getVar('email');
+    $password               = $this->request->getVar('password');
+    // $password_confirmation  = $this->request->getVar('password_confirmation');
 
     $rules = [
       'password' => 'required|min_length[5]',
