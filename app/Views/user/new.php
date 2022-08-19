@@ -29,7 +29,7 @@
       <input type="password" class="form-control" id="floatingPassword" placeholder="Password" name="password">
       <label for="floatingPassword">Password</label>
     </div>
-    <div class="form-floating">
+    <div class="form-floating mb-2">
       <input type="password" class="form-control <?= ($validation->hasError('password_confirmation') ? 'is-invalid' : '') ?>" id="floatingPassword" placeholder="Retype Password" name="password_confirm">
       <label for="floatingPassword">Retype Password</label>
       <?php if ($validation->getError('password_confirmation')) : ?>
@@ -39,13 +39,17 @@
       <?php endif; ?>
     </div>
     <div class="form-floating mb-2">
-      <select class="form-select" id="floatingSelect" aria-label="Floating label select example">
-        <option selected>-- Secret Question --</option>
-        <option value="1">In what city did you meet your spouse/significant other?</option>
-        <option value="2">Where were you when you had your first kiss?</option>
-        <option value="3">In what city or town did your mother and father meet? </option>
+      <select class="form-select <?= ($validation->hasError('question') ? 'is-invalid' : '') ?>" name="question">
+        <option selected value="0">-- Secret Question --</option>
+        <option value="In what city did you meet your spouse/significant other?">In what city did you meet your spouse/significant other?</option>
+        <option value="Where were you when you had your first kiss?">Where were you when you had your first kiss?</option>
+        <option value="In what city or town did your mother and father meet?">In what city or town did your mother and father meet?</option>
       </select>
-      <label for="floatingSelect">Works with selects</label>
+      <?php if ($validation->getError('question')) : ?>
+        <div class="invalid-feedback">
+          <?= $validation->getError('question') ?>
+        </div>
+      <?php endif; ?>
     </div>
     <div class="form-floating mb-2">
       <input type="text" class="form-control <?= ($validation->hasError('answer') ? 'is-invalid' : '') ?>" id="floatingInput" placeholder="Your Answer" name="answer">
