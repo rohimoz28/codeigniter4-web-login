@@ -47,9 +47,9 @@ $routes->get('auth/logout', 'Auth::doLogout', ['filter' => 'member']);
 $routes->get('/auth/forgot', 'Auth::forgot');
 $routes->post('/auth/forgot', 'Auth::doForgot');
 $routes->get('/auth/question', 'Auth::question', ['filter' => 'reset']);
-$routes->post('/auth/question', 'Auth::checkQuestion', ['filter' => 'reset']);
+$routes->post('/auth/question', 'Auth::checkQuestion');
 $routes->get('/auth/reset', 'Auth::reset', ['filter' => 'reset']);
-$routes->post('/auth/reset', 'Auth::doReset', ['filter' => 'reset']);
+$routes->post('/auth/reset', 'Auth::doReset');
 
 
 // User Controller 

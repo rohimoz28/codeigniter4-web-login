@@ -63,19 +63,20 @@ class Auth extends BaseController
       ]);
     }
 
-    if (!$this->authServiceImpl->checkEmail($data['email'])) {
-      // gagal validasi
-      session()->setFlashdata('error', 'Email is not registered.');
-      return redirect()->back();
+    if ($this->authServiceImpl->checkEmail($data['email'])) {
+      // sukses validasi
+      $data = [
+        'email' => $data['email'],
+        'title' => 'Secret Question',
+        'validation' => $this->validator,
+      ];
+
+      return view('/auth/question', $data);
     }
 
-    // sukses validasi
-    $data = [
-      'email' => $data['email'],
-      'title' => 'Secret Question',
-    ];
-
-    return view('/auth/question', $data);
+    // gagal validasi
+    session()->setFlashdata('error', 'Email is not registered.');
+    return redirect()->back();
   }
 
   public function question()
@@ -105,8 +106,11 @@ class Auth extends BaseController
     // check answer
     if (!$this->authServiceImpl->checkAnswer($data['email'], $data['answer'])) {
       // answer wrong
-      session()->setFlashdata('error', 'Your answer is wrong.');
-      return redirect()->back();
+      return view('auth/question', [
+        'title' => 'Secret Question',
+        'email' => $data['email'],
+        'validation' => $this->validator,
+      ]);
     }
 
     // answer correct
