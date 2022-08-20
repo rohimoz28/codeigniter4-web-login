@@ -58,4 +58,23 @@ class Validation extends BaseConfig
       'not_in_list' => 'Please choose your secret questions',
     ]
   ];
+
+  public $forgot = [
+    'email' => 'required|valid_email',
+  ];
+
+  public $question = [
+    'answer' => 'required',
+  ];
+
+  public $reset = [
+    'password' => 'required|min_length[5]',
+    'password_confirmation' => 'required|matches[password]',
+  ];
+
+  public $reset_error = [
+    'password_confirmation' => [
+      'matches' => 'Password not match',
+    ]
+  ];
 }

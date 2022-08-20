@@ -8,11 +8,12 @@ use App\Services\Impl\AuthServiceImpl;
 class Auth extends BaseController
 {
   protected $authServiceImpl;
+  protected $validation;
 
   public function __construct()
   {
     $this->authServiceImpl = new AuthServiceImpl();
-    $this->userModel = new \App\Models\UserModel();
+    $this->validation = \config\services::validation();
   }
 
   public function index()
@@ -27,26 +28,18 @@ class Auth extends BaseController
     $email = $this->request->getVar('email');
     $password = $this->request->getVar('password');
 
-    // validation
+    // validasi
     if (empty($email) || empty($password)) {
       return redirect()->back()->with('error', 'Email or password is required');
     }
-    if ($this->authServiceImpl->login($email, $password)) {
-      $user = $this->userModel->where('email', $email)->first();
-      // put session here
-      $data = [
-        'uniqid' => uniqid(),
-        'id' => $user['id'],
-        'name' => $user['name'],
-        'isLogin' => true,
-      ];
 
-      $this->session->set($data);
-
-      return redirect()->to('user');
+    // login gagal
+    if (!$this->authServiceImpl->login($email, $password)) {
+      return redirect()->back()->with('error', 'Wrong email or password!');
     }
 
-    return redirect()->back()->with('error', 'Wrong email or password!');
+    // login success
+    return redirect()->to('user');
   }
 
   public function forgot()
@@ -58,31 +51,31 @@ class Auth extends BaseController
 
   public function doForgot()
   {
-    // validasi
-    $rules = [
-      'email' => 'required|valid_email',
+    $data = [
+      'email' => $this->request->getVar('email'),
     ];
 
-    if (!$this->validate($rules)) {
+    // validasi
+    if (!$this->validation->run($data, 'forgot')) {
       return view('auth/forgot', [
         'title' => 'Forgot Password',
         'validation' => $this->validator,
       ]);
     }
 
-    // check email
-    $email = $this->request->getVar('email');
-
-    if ($this->authServiceImpl->checkEmail($email)) {
-      $data = [
-        'email' => $email,
-        'title' => 'Secret Question',
-      ];
-      return view('/auth/question', $data);
+    if (!$this->authServiceImpl->checkEmail($data['email'])) {
+      // gagal validasi
+      session()->setFlashdata('error', 'Email is not registered.');
+      return redirect()->back();
     }
 
-    session()->setFlashdata('error', 'Email is not registered.');
-    return redirect()->back();
+    // sukses validasi
+    $data = [
+      'email' => $data['email'],
+      'title' => 'Secret Question',
+    ];
+
+    return view('/auth/question', $data);
   }
 
   public function question()
@@ -95,37 +88,34 @@ class Auth extends BaseController
 
   public function checkQuestion()
   {
-    $email = $this->request->getVar('email');
-    $answer = $this->request->getVar('answer');
-
-    // validasi
-    $rules = [
-      'answer' => 'required',
+    $data = [
+      'email' => $this->request->getVar('email'),
+      'answer' => $this->request->getVar('answer'),
     ];
 
-    $is_validated = $this->validate($rules);
-
-    if (!$is_validated) {
+    // validasi
+    if (!$this->validation->run($data, 'question')) {
       return view('auth/question', [
         'title' => 'Secret Question',
-        'email' => $email,
+        'email' => $data['email'],
         'validation' => $this->validator,
       ]);
     }
 
     // check answer
-    $is_answer = $this->authServiceImpl->checkAnswer($email, $answer);
-
-    if ($is_answer) {
-      $data = [
-        'email' => $email,
-        'title' => 'Reset Password',
-      ];
-      return view('/auth/reset', $data);
+    if (!$this->authServiceImpl->checkAnswer($data['email'], $data['answer'])) {
+      // answer wrong
+      session()->setFlashdata('error', 'Your answer is wrong.');
+      return redirect()->back();
     }
-    // answer wrong
-    session()->setFlashdata('error', 'Your answer is wrong.');
-    return redirect()->back();
+
+    // answer correct
+    $data = [
+      'email' => $data['email'],
+      'title' => 'Reset Password',
+    ];
+
+    return view('/auth/reset', $data);
   }
 
   public function reset()
@@ -137,30 +127,25 @@ class Auth extends BaseController
 
   public function doReset()
   {
-    $email                  = $this->request->getVar('email');
-    $password               = $this->request->getVar('password');
-    // $password_confirmation  = $this->request->getVar('password_confirmation');
-
-    $rules = [
-      'password' => 'required|min_length[5]',
-      'password_confirmation' => 'required|matches[password]',
+    $data = [
+      'email' => $this->request->getVar('email'),
+      'password' => $this->request->getVar('password'),
+      'password_confirmation' => $this->request->getVar('password_confirmation'),
     ];
 
-    $error = [
-      'password_confirmation' => [
-        'matches' => 'Password not match',
-      ]
-    ];
-
-    if (!$this->validate($rules, $error)) {
+    // validasi
+    if (!$this->validation->run($data, 'reset')) {
+      // validasi gagal 
       return view('/auth/reset', [
         'title' => 'Reset Password',
-        'email' => $email,
+        'email' => $data['email'],
         'validation' => $this->validator,
       ]);
     }
 
-    $this->authServiceImpl->update($email, $password);
+    // validasi sukses
+    // reset password
+    $this->authServiceImpl->update($data['email'], $data['password']);
     return redirect()->to('/auth')->with('success', 'Reset password success');
   }
 

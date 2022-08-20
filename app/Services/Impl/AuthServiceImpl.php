@@ -8,11 +8,14 @@ class AuthServiceImpl implements AuthService
 {
 
   protected $userModel;
+  protected $secretQuestion;
+  protected $session;
 
   public function __construct()
   {
     $this->userModel = new \App\Models\UserModel();
     $this->secretQuestion = new \App\Models\SecretQuestionModel();
+    $this->session = \Config\Services::session();
   }
 
   public function login($email, $password): bool
@@ -23,6 +26,14 @@ class AuthServiceImpl implements AuthService
       return false;
     }
 
+    $data = [
+      'uniqid' => uniqid(),
+      'id' => $user['id'],
+      'name' => $user['name'],
+      'isLogin' => true,
+    ];
+
+    $this->session->set($data);
     return true;
   }
 
