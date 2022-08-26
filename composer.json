@@ -37,5 +37,13 @@
   "post-install-cmd": [
     "php artisan clear-compiled",
     "chmod -R 775 public/"
+  ],
+  "test:coverage": [
+    "@putenv XDEBUG_MODE=coverage",
+    "phpunit --color=always --coverage-clover=\"output/code-coverage/clover.xml\""
+  ],
+  "test:coverage-html": [
+    "@putenv XDEBUG_MODE=coverage",
+    "phpunit --color=always --coverage-html=\"output/code-coverage\""
   ]
 }
