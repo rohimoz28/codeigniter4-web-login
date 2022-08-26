@@ -18,9 +18,19 @@ class AuthServiceImpl implements AuthService
     $this->session = \Config\Services::session();
   }
 
-  public function login($email, $password): bool
+  public function findUser(string $email): ?array
   {
     $user = $this->userModel->where('email', $email)->first();
+    return $user;
+  }
+
+  public function login($email, $password): bool
+  {
+    $user = $this->findUser($email);
+
+    if (!$user) {
+      return false;
+    }
 
     if (!password_verify($password, $user['password'])) {
       return false;
@@ -39,7 +49,7 @@ class AuthServiceImpl implements AuthService
 
   public function checkEmail($email): bool
   {
-    $user = $this->userModel->where('email', $email)->first();
+    $user = $this->findUser($email);
 
     if ($user) {
       return true;
@@ -50,7 +60,8 @@ class AuthServiceImpl implements AuthService
 
   public function checkAnswer(string $email, string $answer): bool
   {
-    $user = $this->userModel->where('email', $email)->first();
+    // $user = $this->userModel->where('email', $email)->first();
+    $user = $this->findUser($email);
     $is_true = $this->secretQuestion->where('id', $user['id'])->get();
     $is_true = $is_true->getFirstRow('array');
 
@@ -63,7 +74,7 @@ class AuthServiceImpl implements AuthService
 
   public function update(string $email, string $password): void
   {
-    $user = $this->userModel->where('email', $email)->first();
+    $user = $this->findUser($email);
     $id = $user['id'];
 
     $data = [

@@ -28,6 +28,12 @@ class Auth extends BaseController
     $email = $this->request->getVar('email');
     $password = $this->request->getVar('password');
 
+    $findUser = $this->authServiceImpl->findUser($email);
+
+    if (!$findUser) {
+      return redirect()->back()->with('error', 'Email not registered!');
+    }
+
     // validasi
     if (empty($email) || empty($password)) {
       return redirect()->back()->with('error', 'Email or password is required');
